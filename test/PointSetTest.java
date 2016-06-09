@@ -39,6 +39,25 @@ public class PointSetTest {
     }
 
     @Test
+    public void insertDuplicate() {
+        PointSet set = new PointSet();
+
+        set.insert(new Point(0, 0));
+        set.insert(new Point(0, 0));
+
+        assertThat(set.size(), is(1));
+        assertThat(set.isEmpty(), is(false));
+    }
+
+    @Test
+    public void containsNullThrowsException() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("point is null");
+
+        new PointSet().contains(null);
+    }
+
+    @Test
     public void contains() {
         PointSet set = new PointSet();
         Point p1 = new Point(0, 0);
@@ -78,7 +97,6 @@ public class PointSetTest {
         Rectangle r = new Rectangle(0, 1, 4, 2);
         assertThat(set.range(r).iterator().hasNext(), is(false));
     }
-
 
     @Test
     public void range() {

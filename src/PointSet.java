@@ -29,6 +29,9 @@ public class PointSet {
     }
 
     public boolean contains(Point point) {
+        if (point == null) {
+            throw new NullPointerException("point is null");
+        }
         return points.contains(point);
     }
 
