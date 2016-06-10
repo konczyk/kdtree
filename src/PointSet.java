@@ -28,11 +28,11 @@ public class PointSet {
         points.add(point);
     }
 
-    public boolean contains(Point point) {
-        if (point == null) {
-            throw new NullPointerException("point is null");
+    public boolean contains(Point queryPoint) {
+        if (queryPoint == null) {
+            throw new NullPointerException("query point is null");
         }
-        return points.contains(point);
+        return points.contains(queryPoint);
     }
 
     public Iterable<Point> range(Rectangle rectangle) {
@@ -50,20 +50,20 @@ public class PointSet {
         return pointsInRange;
     }
 
-    public Point nearest(Point targetPoint) {
-        if (targetPoint == null) {
-            throw new NullPointerException("target point is null");
+    public Point nearest(Point queryPoint) {
+        if (queryPoint == null) {
+            throw new NullPointerException("query point is null");
         }
 
         Point nearest = null;
         double distance = 0;
         for (Point point: points) {
-            if (point.equals(targetPoint)) {
+            if (point.equals(queryPoint)) {
                 return point;
             } else if (nearest == null
-                        || targetPoint.distanceTo(point) < distance) {
+                    || queryPoint.distanceTo(point) < distance) {
                 nearest = point;
-                distance = targetPoint.distanceTo(point);
+                distance = queryPoint.distanceTo(point);
             }
         }
 

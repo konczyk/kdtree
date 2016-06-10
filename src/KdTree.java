@@ -60,8 +60,9 @@ public class KdTree {
                         Orientation orientation) {
         if (link == null) {
             size++;
-            Rectangle rect = createRectangle(parent, point, orientation.swap());
-            return new Node(point, rect);
+            Rectangle rectangle = createRectangle(parent, point,
+                                                  orientation.swap());
+            return new Node(point, rectangle);
         } else {
             int cmp = comparePoints(point, link.point, orientation);
             if (cmp < 0) {
@@ -78,9 +79,9 @@ public class KdTree {
 
     private Rectangle createRectangle(Node parent, Point point,
                                       Orientation orientation) {
-        Rectangle newRect;
+        Rectangle newRectangle;
         if (parent == null) {
-            newRect = new Rectangle(0, 0, 1, 1);
+            newRectangle = new Rectangle(0, 0, 1, 1);
         } else {
             int cmp = comparePoints(point, parent.point, orientation);
             double xmin = parent.rectangle.xmin();
@@ -96,29 +97,29 @@ public class KdTree {
             } else {
                 ymin = parent.point.y();
             }
-            newRect = new Rectangle(xmin, ymin, xmax, ymax);
+            newRectangle = new Rectangle(xmin, ymin, xmax, ymax);
         }
 
-        return newRect;
+        return newRectangle;
     }
 
-    public boolean contains(Point point) {
-        if (point == null) {
-            throw new NullPointerException("point is null");
+    public boolean contains(Point queryPoint) {
+        if (queryPoint == null) {
+            throw new NullPointerException("query point is null");
         }
-        return !isEmpty() && contains(root, point, Orientation.VERTICAL);
+        return !isEmpty() && contains(root, queryPoint, Orientation.VERTICAL);
     }
 
-    private boolean contains(Node node, Point point, Orientation orientation) {
+    private boolean contains(Node node, Point queryPoint, Orientation orientation) {
         if (node == null) {
             return false;
-        } else if (point.equals(node.point)) {
+        } else if (queryPoint.equals(node.point)) {
             return true;
         } else {
-            if (comparePoints(point, node.point, orientation) < 0) {
-                return contains(node.leftBottomLink, point, orientation.swap());
+            if (comparePoints(queryPoint, node.point, orientation) < 0) {
+                return contains(node.leftBottomLink, queryPoint, orientation.swap());
             } else {
-                return contains(node.rightTopLink, point, orientation.swap());
+                return contains(node.rightTopLink, queryPoint, orientation.swap());
             }
         }
     }
@@ -143,63 +144,64 @@ public class KdTree {
         return points;
     }
 
-    private void range(List<Point> points, Node node, Rectangle rect) {
-        if (node != null && node.rectangle.intersects(rect)) {
-            if (rect.contains(node.point)) {
+    private void range(List<Point> points, Node node, Rectangle rectangle) {
+        if (node != null && node.rectangle.intersects(rectangle)) {
+            if (rectangle.contains(node.point)) {
                 points.add(node.point);
             }
-            range(points, node.leftBottomLink, rect);
-            range(points, node.rightTopLink, rect);
+            range(points, node.leftBottomLink, rectangle);
+            range(points, node.rightTopLink, rectangle);
         }
     }
 
-    public Point nearest(Point targetPoint) {
-        if (targetPoint == null) {
-            throw new NullPointerException("target point is null");
+    public Point nearest(Point queryPoint) {
+        if (queryPoint == null) {
+            throw new NullPointerException("query point is null");
         }
 
         if (root == null) {
             return null;
         }
 
-        return nearest(root.point, root, targetPoint, Orientation.VERTICAL);
+        return nearest(root.point, root, queryPoint, Orientation.VERTICAL);
     }
 
-    private Point nearest(Point current, Node node, Point query,
+    private Point nearest(Point nearestPoint, Node node, Point queryPoint,
                           Orientation orientation) {
 
-        if (node == null || !isRectCloser(query, current, node.rectangle)) {
-            return current;
+        if (node == null
+                || !isRectangleCloser(queryPoint, nearestPoint, node.rectangle)) {
+            return nearestPoint;
         }
 
-        current = closer(query, current, node.point);
+        nearestPoint = closer(queryPoint, nearestPoint, node.point);
 
         Node primaryLink;
         Node secondaryLink;
-        if (comparePoints(query, node.point, orientation) < 0) {
+        if (comparePoints(queryPoint, node.point, orientation) < 0) {
             primaryLink = node.leftBottomLink;
             secondaryLink = node.rightTopLink;
         } else {
             primaryLink = node.rightTopLink;
             secondaryLink = node.leftBottomLink;
         }
-        current = nearest(current, primaryLink, query, orientation.swap());
-        current = nearest(current, secondaryLink, query, orientation.swap());
+        nearestPoint = nearest(nearestPoint, primaryLink, queryPoint, orientation.swap());
+        nearestPoint = nearest(nearestPoint, secondaryLink, queryPoint, orientation.swap());
 
-        return current;
+        return nearestPoint;
     }
 
-    private boolean isRectCloser(Point queryPoint, Point nearestPoint,
-                                 Rectangle nodeRect) {
+    private boolean isRectangleCloser(Point queryPoint, Point nearestPoint,
+                                      Rectangle nodeRectangle) {
 
         double nearestDistance = nearestPoint.distanceSquaredTo(queryPoint);
-        double rectDistance = nodeRect.distanceSquaredTo(queryPoint);
+        double rectangleDistance = nodeRectangle.distanceSquaredTo(queryPoint);
 
-        return rectDistance < nearestDistance;
+        return rectangleDistance < nearestDistance;
     }
 
     private Point closer(Point queryPoint, Point testPoint1,
-                           Point testPoint2) {
+                         Point testPoint2) {
 
         double distance1 = testPoint1.distanceSquaredTo(queryPoint);
         double distance2 = testPoint2.distanceSquaredTo(queryPoint);

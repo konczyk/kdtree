@@ -119,7 +119,7 @@ public class PointSetTest {
     @Test
     public void nearestToNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("target point is null");
+        thrown.expectMessage("query point is null");
 
         new PointSet().nearest(null);
     }

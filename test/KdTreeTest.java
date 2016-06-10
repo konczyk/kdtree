@@ -181,7 +181,7 @@ public class KdTreeTest {
     @Test
     public void nearestToNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("target point is null");
+        thrown.expectMessage("query point is null");
 
         new KdTree().nearest(null);
     }
