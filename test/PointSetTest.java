@@ -52,7 +52,7 @@ public class PointSetTest {
     @Test
     public void containsNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("point is null");
+        thrown.expectMessage("query point is null");
 
         new PointSet().contains(null);
     }
@@ -72,7 +72,7 @@ public class PointSetTest {
     @Test
     public void rangeWithNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("rectangle is null");
+        thrown.expectMessage("query rectangle is null");
 
         new PointSet().range(null);
     }

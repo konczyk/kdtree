@@ -51,7 +51,7 @@ public class KdTreeTest {
     @Test
     public void containsNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("point is null");
+        thrown.expectMessage("query point is null");
 
         new KdTree().contains(null);
     }
@@ -134,7 +134,7 @@ public class KdTreeTest {
     @Test
     public void rangeWithNullThrowsException() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("rectangle is null");
+        thrown.expectMessage("query rectangle is null");
 
         new KdTree().range(null);
     }

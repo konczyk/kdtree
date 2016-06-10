@@ -5,7 +5,7 @@ import java.util.TreeSet;
 /**
  *  A set of points in the unit square
  */
-public class PointSet {
+public class PointSet implements Searchable {
 
     private final TreeSet<Point> points;
 
@@ -13,14 +13,17 @@ public class PointSet {
         points = new TreeSet<>();
     }
 
+    @Override
     public boolean isEmpty() {
         return size() == 0;
     }
 
+    @Override
     public int size() {
         return points.size();
     }
 
+    @Override
     public void insert(Point point) {
         if (point == null) {
             throw new NullPointerException("point is null");
@@ -28,6 +31,7 @@ public class PointSet {
         points.add(point);
     }
 
+    @Override
     public boolean contains(Point queryPoint) {
         if (queryPoint == null) {
             throw new NullPointerException("query point is null");
@@ -35,14 +39,15 @@ public class PointSet {
         return points.contains(queryPoint);
     }
 
-    public Iterable<Point> range(Rectangle rectangle) {
-        if (rectangle == null) {
+    @Override
+    public Iterable<Point> range(Rectangle queryRectangle) {
+        if (queryRectangle == null) {
             throw new NullPointerException("rectangle is null");
         }
 
         List<Point> pointsInRange = new ArrayList<>();
         for (Point point: points) {
-            if (rectangle.contains(point)) {
+            if (queryRectangle.contains(point)) {
                 pointsInRange.add(point);
             }
         }
@@ -50,6 +55,7 @@ public class PointSet {
         return pointsInRange;
     }
 
+    @Override
     public Point nearest(Point queryPoint) {
         if (queryPoint == null) {
             throw new NullPointerException("query point is null");

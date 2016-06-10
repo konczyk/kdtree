@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * A set of points in the unit square using a 2d-tree implementation
  */
-public class KdTree {
+public class KdTree implements Searchable {
 
     private enum Orientation {
         HORIZONTAL, VERTICAL;
@@ -40,14 +40,17 @@ public class KdTree {
         }
     }
 
+    @Override
     public boolean isEmpty() {
         return size() == 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void insert(Point point) {
         if (point == null) {
             throw new NullPointerException("point is null");
@@ -103,6 +106,7 @@ public class KdTree {
         return newRectangle;
     }
 
+    @Override
     public boolean contains(Point queryPoint) {
         if (queryPoint == null) {
             throw new NullPointerException("query point is null");
@@ -134,26 +138,28 @@ public class KdTree {
         }
     }
 
-    public Iterable<Point> range(Rectangle rectangle) {
-        if (rectangle == null) {
+    @Override
+    public Iterable<Point> range(Rectangle queryRectangle) {
+        if (queryRectangle == null) {
             throw new NullPointerException("rectangle is null");
         }
         List<Point> points = new ArrayList<>();
-        range(points, root, rectangle);
+        range(points, root, queryRectangle);
 
         return points;
     }
 
-    private void range(List<Point> points, Node node, Rectangle rectangle) {
-        if (node != null && node.rectangle.intersects(rectangle)) {
-            if (rectangle.contains(node.point)) {
+    private void range(List<Point> points, Node node, Rectangle queryRectangle) {
+        if (node != null && node.rectangle.intersects(queryRectangle)) {
+            if (queryRectangle.contains(node.point)) {
                 points.add(node.point);
             }
-            range(points, node.leftBottomLink, rectangle);
-            range(points, node.rightTopLink, rectangle);
+            range(points, node.leftBottomLink, queryRectangle);
+            range(points, node.rightTopLink, queryRectangle);
         }
     }
 
+    @Override
     public Point nearest(Point queryPoint) {
         if (queryPoint == null) {
             throw new NullPointerException("query point is null");
