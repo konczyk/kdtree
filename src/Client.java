@@ -1,10 +1,7 @@
-import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.validators.PositiveInteger;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import javax.swing.SwingUtilities;
 
@@ -35,23 +32,14 @@ public class Client {
     private boolean stdin = false;
 
     @Parameter(
-        names = {"--vis-type", "-t"},
-        description = "Visualisation type\n"
-                    + "p: Points\n"
-                    + "r: Range search\n"
-                    + "n: Nearest neighbor search",
-        validateWith = TypeValidator.class)
-    private String type = "k";
+        names = {"--nearest-neighbor-search", "-ns"},
+        description = "Use nearest neighbor search visualization")
+    private boolean ns = false;
 
-    public static class TypeValidator implements IParameterValidator {
-        private static List<String> types = Arrays.asList("k", "r", "n");
-        @Override
-        public void validate(String name, String value) throws ParameterException {
-            if (!types.contains(value)) {
-                throw new ParameterException("Invalid visualisation type: " + value);
-            }
-        }
-    }
+    @Parameter(
+        names = {"--range-search", "-rs"},
+        description = "Use range search visualization")
+    private boolean rs = false;
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -75,6 +63,17 @@ public class Client {
             throw new ParameterException(
                 "Parameters --stdin and --points-num are mutually exclusive");
         }
+
+        if (!help && !ns && !rs) {
+            throw new ParameterException(
+                "You must choose visualization type");
+        }
+
+        if (ns && rs) {
+            throw new ParameterException(
+                "Parameters --nearest-neighbor-search and --range-search"
+                + " are mutually exclusive");
+        }
     }
 
     private void run() {
@@ -87,7 +86,12 @@ public class Client {
                     points = new PointSet();
                 }
                 final Plane plane = new Plane(points, num, stdin);
-                new Visualizer(points, plane);
+                if (ns) {
+                    plane.setNearestNeighborSearch();
+                } else {
+                    plane.setRangeSearch();
+                }
+                new Visualizer(plane);
             }
         });
     }
