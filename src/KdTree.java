@@ -141,7 +141,7 @@ public class KdTree implements Searchable {
     @Override
     public Iterable<Point> range(Rectangle queryRectangle) {
         if (queryRectangle == null) {
-            throw new NullPointerException("rectangle is null");
+            throw new NullPointerException("query rectangle is null");
         }
         List<Point> points = new ArrayList<>();
         range(points, root, queryRectangle);
