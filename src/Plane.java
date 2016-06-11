@@ -134,7 +134,7 @@ public class Plane extends JPanel {
                              RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setPaint(Color.RED);
         for (Point point: selectedPoints) {
-            drawPoint(g2d, point);
+            drawPoint(g2d, point, 4);
         }
     }
 
@@ -171,22 +171,21 @@ public class Plane extends JPanel {
                 while (sc.hasNext()) {
                     Point p = new Point(sc.nextDouble(), sc.nextDouble());
                     points.insert(p);
-                    drawPoint(g2d, p);
+                    drawPoint(g2d, p, 3);
                 }
             }
         } else {
             for (int i = 0; i < num; i++) {
                 Point p = new Point(rand.nextDouble(), rand.nextDouble());
                 points.insert(p);
-                drawPoint(g2d, p);
+                drawPoint(g2d, p, 3);
             }
         }
     }
 
-    private void drawPoint(Graphics2D g2d, Point point) {
+    private void drawPoint(Graphics2D g2d, Point point, int r) {
         int x = (int) Math.round(scaleX(point.x()));
         int y = (int) Math.round(scaleY(point.y()));
-        int r = 3;
         g2d.fill(new Ellipse2D.Double(x - r, y - r, 2*r, 2*r));
     }
 
