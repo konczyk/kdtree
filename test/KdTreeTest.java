@@ -1,8 +1,9 @@
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Iterator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -144,7 +145,7 @@ public class KdTreeTest {
         KdTree tree = new KdTree();
         Rectangle r = new Rectangle(0.0, 0.0, 1.0, 1.0);
 
-        assertThat(tree.range(r).iterator().hasNext(), is(false));
+        assertThat(tree.range(r), is(emptyIterable()));
     }
 
     @Test
@@ -152,12 +153,12 @@ public class KdTreeTest {
         KdTree tree = new KdTree();
         Point p1 = new Point(0.0, 0.0);
         Point p2 = new Point(0.3, 0.3);
+        Rectangle r = new Rectangle(0.0, 0.1, 0.4, 0.2);
 
         tree.insert(p1);
         tree.insert(p2);
 
-        Rectangle r = new Rectangle(0.0, 0.1, 0.4, 0.2);
-        assertThat(tree.range(r).iterator().hasNext(), is(false));
+        assertThat(tree.range(r), is(emptyIterable()));
     }
 
     @Test
@@ -166,16 +167,13 @@ public class KdTreeTest {
         Point p1 = new Point(0.0, 0.0);
         Point p2 = new Point(0.3, 0.3);
         Point p3 = new Point(0.3, 0.5);
+        Rectangle r = new Rectangle(0.2, 0.3, 0.3, 0.5);
 
         tree.insert(p1);
         tree.insert(p2);
         tree.insert(p3);
 
-        Rectangle r = new Rectangle(0.2, 0.3, 0.3, 0.5);
-        Iterator<Point> range = tree.range(r).iterator();
-        assertThat(range.next(), is(p2));
-        assertThat(range.next(), is(p3));
-        assertThat(range.hasNext(), is(false));
+        assertThat(tree.range(r), contains(p2, p3));
     }
 
     @Test
