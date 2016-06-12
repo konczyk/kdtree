@@ -42,21 +42,21 @@ brute-force algorithm:
     $ cat data/points.txt | java -cp build/libs/kdtree.jar Client -ns -b -
 
 Nearest neighbor search using data of 100 randomly generated points and the
-default fast algorithm ([see sample screencast](data/neighbor1.mp4?raw=true)):
+default fast algorithm ([sample screencast](data/neighbor1.mp4?raw=true)):
 
     $ java -cp build/libs/kdtree.jar Client -ns -n 100
 
 Nearest neighbor search using data of 10000 randomly generated points and the
-default fast algorithm ([see sample screencast](data/neighbor2.mp4?raw=true)):
+default fast algorithm ([sample screencast](data/neighbor2.mp4?raw=true)):
 
     $ java -cp build/libs/kdtree.jar Client -ns -n 10000
 
 Range search using data of 100 randomly generated points and the
-default fast algorithm ([see sample screencast](data/range1.mp4?raw=true)):
+default fast algorithm ([sample screencast](data/range1.mp4?raw=true)):
 
     $ java -cp build/libs/kdtree.jar Client -rs -n 100
 
 Range search using data of 10000 randomly generated points and the
-default fast algorithm ([see sample screencast](data/range2.mp4?raw=true)):
+default fast algorithm ([sample screencast](data/range2.mp4?raw=true)):
 
     $ java -cp build/libs/kdtree.jar Client -rs -n 10000
